@@ -3,6 +3,8 @@ from agents.agent import Agent
 import random
 import torch
 
+import config
+from game import Game
 
 class QNetwork(torch.nn.Module):
 
@@ -45,14 +47,17 @@ class Replay:
 
 class DeepQAgent(Agent):
 
-    def update(self, gamma, episode_count, step_count):
+    def update(self, episode_count, step_count):
         pass
 
     def __init__(self):
         self._update_target_count = 0
+        self._gamma = config.gamma
+        self._replay_buffer = Replay()
 
-
-    def act(self, game):
+    def act(self, game: Game):
+        state_from = game.state()
+        expected_rewards =
         pass
 
     def _preprocess(self, state):
@@ -62,6 +67,5 @@ class DeepQAgent(Agent):
         self._student = QNetwork()
         self._target = QNetwork()
 
-
-    @staticmethod
-    def new_agent() -> Agent:
+    def _create_training_batch(self):
+        pass
