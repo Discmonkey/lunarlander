@@ -1,5 +1,6 @@
 # This is a sample Python script.
 import config
+from agents.deep_q_agent import DeepQAgent
 from game import Game
 from agents.agent import Agent
 import numpy as np
@@ -12,7 +13,7 @@ import utils
 
 def run():
     game = Game()
-    agent = Agent()
+    agent = DeepQAgent()
     for episode in range(1000):
         state_0 = game.reset()
         eps = utils.episode_epsilon(episode)
@@ -25,7 +26,7 @@ def run():
 
             state_1, reward, finished = game.act(action)
             agent.update(
-                episode, step, state_0, state_1, reward, finished)
+                episode, step, state_0, action, state_1, reward, finished)
 
             # clean up for next episode
             if finished:

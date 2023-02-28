@@ -7,7 +7,13 @@ starting_epsilon = 1.00
 epsilon_update_schedule = 100
 # the maximum number of steps in a single episode
 max_steps = 1000
-# whether rewards should be clipped to (-1, 1)
-clip_rewards = True
+# clip the squared error (-1, 1)
+clip_error = True
 # how often we show the game during training
 show_every = 20
+# update target network every
+update_target_every = max_steps / 20
+# mini-batch size for training
+mini_batch_size = 32
+# learning rate
+lr = 0.01
