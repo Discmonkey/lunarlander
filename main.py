@@ -14,27 +14,32 @@ import utils
 def run():
     game = Game()
     agent = DeepQAgent()
-    for episode in range(1000):
+    for episode in range(10000):
+        print(f"Starting episode {episode}")
         state_0 = game.reset()
         eps = utils.episode_epsilon(episode)
-
+        total_reward = 0
         for step in range(config.max_steps):
             if utils.choose_random_action(eps):
                 action = game.sample_action()
             else:
-                action = np.argmax(agent.evaluate(state_0))
+                evaluations = agent.evaluate(state_0)
+                action = np.argmax(evaluations)
 
             state_1, reward, finished = game.act(action)
+            total_reward += reward
             agent.update(
                 episode, step, state_0, action, state_1, reward, finished)
 
             # clean up for next episode
             if finished:
                 break
-            if episode % config.show_every == 2:
-                game.show()
-            state_0 = state_1
 
+            state_0 = state_1
+        if episode % config.show_every == 2:
+            print(f"Total reward, no randomness: {utils.show_game(agent)}")
+
+        print(f"Finished episode {episode}, total reward {total_reward}, with epsilon {eps}")
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

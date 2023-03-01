@@ -19,8 +19,11 @@ Reward = float
 
 
 class Game:
-    def __init__(self):
-        self.env = gym.make("LunarLander-v2", render_mode="human")
+    def __init__(self, render=False):
+        if render:
+            self.env = gym.make("LunarLander-v2", render_mode="human")
+        else:
+            self.env = gym.make("LunarLander-v2", render_mode=None)
 
     def sample_action(self):
         return self.env.action_space.sample()

@@ -1,6 +1,11 @@
+import numpy as np
+
 import config
 
 import random
+
+from agents.agent import Agent
+from game import Game
 
 
 def episode_epsilon(episode_num, min_eps=0.01) -> float:
@@ -12,3 +17,16 @@ def episode_epsilon(episode_num, min_eps=0.01) -> float:
 def choose_random_action(epsilon) -> bool:
     return epsilon > random.random()
 
+
+def show_game(agent: Agent):
+    game = Game(render=True)
+    state = game.reset()
+    total_reward = 0
+    for step in range(1000):
+        action = np.argmax(agent.evaluate(state))
+        state, reward, done = game.act(action)
+        total_reward += reward
+        if done:
+            return total_reward
+
+    return total_reward
