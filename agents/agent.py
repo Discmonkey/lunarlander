@@ -8,5 +8,8 @@ class Agent:
     def evaluate(self, state: State) -> numpy.ndarray:
         raise NotImplementedError
 
-    def update(self, episode_count, step_count, state_0, action, state_1, reward, finished):
+    def update(self, state_0, action, state_1, reward, finished):
         raise NotImplementedError
+
+    def train(self, num_steps=1):
+        pass

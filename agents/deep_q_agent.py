@@ -69,17 +69,19 @@ class DeepQAgent(Agent):
 
         self._loss = torch.nn.MSELoss()
 
-    def update(self, episode_count, step_count, state_0, action, state_1, reward, finished):
-        if step_count == 0:
+    def update(self, state_0, action, state_1, reward, finished):
+        if random.random() > .98:
             self._target_network.load_state_dict(self._student_network.state_dict())
 
         self._replay_buffer.add(
             self._preprocess(state_0),
             self._preprocess(state_1),
             action, reward, finished)
+
+    def train(self, num_steps=1):
         optimizer = torch.optim.Adam(self._student_network.parameters(), lr=config.lr)
-        # scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
-        for i in range(config.training_epochs):
+
+        for step in range(num_steps):
             x, y, actions = self._process_batch(self._replay_buffer.get_batch(config.mini_batch_size))
             optimizer.zero_grad()
 
@@ -87,10 +89,11 @@ class DeepQAgent(Agent):
             loss = self._loss(prediction, y)
             if config.clip_error:
                 loss = torch.clamp(loss, -1, 1)
-            print(loss)
             loss.backward()
             optimizer.step()
-            # scheduler.step()
+
+            if step % config.print_step == 1:
+                print(f"{step} - {loss}")
 
     def evaluate(self, state: State) -> numpy.ndarray:
         torch_state = torch.tensor(self._preprocess(state), dtype=torch.float)

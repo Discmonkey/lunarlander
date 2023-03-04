@@ -18,8 +18,8 @@ def choose_random_action(epsilon) -> bool:
     return epsilon > random.random()
 
 
-def show_game(agent: Agent):
-    game = Game(render=True)
+def sim_game(agent: Agent, render=True):
+    game = Game(render=render)
     state = game.reset()
     total_reward = 0
     for step in range(1000):

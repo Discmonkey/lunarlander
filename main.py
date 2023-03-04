@@ -28,17 +28,16 @@ def run():
 
             state_1, reward, finished = game.act(action)
             total_reward += reward
-            agent.update(
-                episode, step, state_0, action, state_1, reward, finished)
-
+            agent.update(state_0, action, state_1, reward, finished)
+            agent.train()
             # clean up for next episode
             if finished:
                 break
 
             state_0 = state_1
         if episode % config.show_every == 2:
-            print(f"Total reward, no randomness: {utils.show_game(agent)}")
-
+            print(f"Total reward, no randomness: {utils.sim_game(agent, False)}")
+        agent.train(config.train_length)
         print(f"Finished episode {episode}, total reward {total_reward}, with epsilon {eps}")
 
 # Press the green button in the gutter to run the script.
